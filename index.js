@@ -25,6 +25,18 @@ app.get("/api/persons", (req,res) => {
 
     res.json(phonebook);
 })
+app.get("/api/persons/:id", (req,res) => {
+    const id = Number(req.params.id);
+    console.log(id, typeof id)
+    const person = phonebook.find(p => p.id === id)
+    console.log(person)
+    if (!person) {
+        return res.status(404).end()
+    }
+    return res.json(person);
+})
+
+
 app.get("/info", (req,res) => {
     const response = `
 <p>The phonebook has ${phonebook.length} people</p>

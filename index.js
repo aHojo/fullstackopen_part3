@@ -1,7 +1,7 @@
 import express from 'express';
 const app = express();
 
-const phonebook = [
+let phonebook = [
     {
         "id": 1,
         "name": "Kairi Hojo",
@@ -27,9 +27,7 @@ app.get("/api/persons", (req,res) => {
 })
 app.get("/api/persons/:id", (req,res) => {
     const id = Number(req.params.id);
-    console.log(id, typeof id)
     const person = phonebook.find(p => p.id === id)
-    console.log(person)
     if (!person) {
         return res.status(404).end()
     }
@@ -44,6 +42,13 @@ app.get("/info", (req,res) => {
     `
     
     res.send(response)
+})
+
+app.delete("/api/persons/:id", (req,res) => {
+    const id = Number(req.params.id);
+    phonebook = phonebook.filter(p => p.id !== id)
+
+    res.status(204).end()
 })
 
 

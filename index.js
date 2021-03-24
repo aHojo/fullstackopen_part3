@@ -46,16 +46,17 @@ app.get("/info", (req,res) => {
 
 app.post("/api/persons", (req,res) => {
     
-    const  body = req.body;
-    console.log("HERE IN BODY", body, req)
-
-    if (!body.name) return res.status(404).json({'error': "Name field is missing"})
-    if (!body.number) return res.status(404).json({'error': "Number field is missing"})
+    const  {name, number} = req.body;
+    
+    if (!name) return res.status(404).json({'error': "Name field is missing"})
+    if (!number) return res.status(404).json({'error': "Number field is missing"})
+    const nameExists = phonebook.find((p) => p.name.toLowerCase() === name.toLowerCase());
+    if (nameExists) return res.status(404).json({'error': "Name already exists"})
 
     const newPerson = {
         id: Math.floor(Math.random() * 10000000000) + 1,
-        name: body.name,
-        number: body.number
+        name: name,
+        number: number
     }
 
     phonebook = [...phonebook, newPerson]

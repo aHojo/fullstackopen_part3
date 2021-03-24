@@ -19,7 +19,7 @@ let phonebook = [
     },
 ]
 
-
+app.use(express.json())
 app.get("/api/persons", (req,res) => {
 
 
@@ -42,6 +42,24 @@ app.get("/info", (req,res) => {
     `
     
     res.send(response)
+})
+
+app.post("/api/persons", (req,res) => {
+    
+    const  body = req.body;
+    console.log("HERE IN BODY", body, req)
+
+    if (!body.name) return res.status(404).json({'error': "Name field is missing"})
+    if (!body.number) return res.status(404).json({'error': "Number field is missing"})
+
+    const newPerson = {
+        id: Math.floor(Math.random() * 10000000000) + 1,
+        name: body.name,
+        number: body.number
+    }
+
+    phonebook = [...phonebook, newPerson]
+    res.json(newPerson)
 })
 
 app.delete("/api/persons/:id", (req,res) => {

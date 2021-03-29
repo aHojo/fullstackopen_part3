@@ -1,8 +1,10 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
+
 
 const app = express();
-
+app.use(cors());
 
 
 let phonebook = [
@@ -23,8 +25,8 @@ let phonebook = [
     },
 ]
 
+app.use(express.static('build'))
 app.use(express.json());
-
 morgan.token('content', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'));
 app.get("/api/persons", (req,res) => {
@@ -78,5 +80,5 @@ app.delete("/api/persons/:id", (req,res) => {
 })
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`Server start on ${PORT}`))
